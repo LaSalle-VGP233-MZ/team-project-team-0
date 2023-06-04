@@ -31,9 +31,12 @@ Please list your planned work division.
 ## Milestone 1
 #### Team member responsibilities
 Please list **each team member's** contribution in this milestone as detailed as possible.
+
 Riley: Player object, player movement, shooting
+
 Anselmo: Tilemap, level design
-Taylor: Enemy object, enemy attacks, enemy spawn and death
+
+Taylor: Enemy object, enemy attacks, enemy spawn and death, boarded up windows
 #### Obstacles you encountered in this milestone, and things you learned
 Please list **each team member's** obstacles and things you learned.
 ## Milestone 2
