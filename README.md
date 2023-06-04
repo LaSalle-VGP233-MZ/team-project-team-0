@@ -1,7 +1,7 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/YxFW59aB)
 ## Milestone 0
 #### Team name
-
+Team Zero
 #### Team members
 Riley
 Taylor
@@ -37,6 +37,7 @@ Riley: Player object, player movement, shooting
 Anselmo: Tilemap, level design
 
 Taylor: Enemy object, enemy attacks, enemy spawn and death, boarded up windows
+
 #### Obstacles you encountered in this milestone, and things you learned
 Please list **each team member's** obstacles and things you learned.
 ## Milestone 2
