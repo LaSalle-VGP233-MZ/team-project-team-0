@@ -8,8 +8,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float speed;
 
     [SerializeField] Camera cam;
+    [SerializeField] private Transform prompt;
+
     Animator anime;
     Vector3 mouse;
+
     void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
@@ -38,5 +41,13 @@ public class PlayerMovement : MonoBehaviour
         {
             anime.SetBool("idle", true);
         }
+    }
+    public void DisplayPrompt()
+    {
+        prompt.gameObject.SetActive(true);
+    }
+    public void HidePrompt()
+    {
+        prompt.gameObject.SetActive(false);
     }
 }
