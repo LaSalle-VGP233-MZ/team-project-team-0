@@ -67,7 +67,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3914939881295504283}
   - component: {fileID: 3914939881295504282}
-  - component: {fileID: 3914939881295504285}
   m_Layer: 9
   m_Name: BuildTrigger
   m_TagString: Untagged
@@ -105,18 +104,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &3914939881295504285
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3914939881295504280}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d0a634c294eb634a9dd9c410b71810b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3914939881526094571
 GameObject:
   m_ObjectHideFlags: 0

@@ -18,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
 
     private Inputs _input;
 
+    private GameObject currentBar;
     private void Awake()
     {
         _input = new Inputs();
@@ -88,6 +89,33 @@ public class PlayerMovement : MonoBehaviour
         _input.Player.Movement.performed -= Movement;
         _input.Player.Movement.canceled -= StopMovement;
     }
+
+
+
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.CompareTag("PlayerTrigger"))
+        {
+            DisplayPrompt();
+            if (Input.GetKey(KeyCode.F))
+            {
+                transform.parent.GetComponent<BoxCollider2D>().enabled = true;
+                transform.parent.GetComponent<SpriteRenderer>().enabled = true;
+                currentBar = collision.gameObject;
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("PlayerTrigger"))
+        {
+            HidePrompt();
+        }
+    }
+
+
 }
 
 //Tagged
