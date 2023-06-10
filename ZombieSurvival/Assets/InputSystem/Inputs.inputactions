@@ -71,6 +71,52 @@
                     "isPartOfComposite": true
                 }
             ]
+        },
+        {
+            "name": "Actions",
+            "id": "c5af1cb8-9fb4-447c-80ad-a1d940ea8897",
+            "actions": [
+                {
+                    "name": "InputPressedBar",
+                    "type": "Button",
+                    "id": "0c1e29a3-ee9a-49d0-9546-3bd52f1d54c8",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "InputPressedFire",
+                    "type": "Button",
+                    "id": "9c88d1d7-f308-4f34-8a29-a8f398b5dd27",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "e4920202-4801-4740-b0cf-03f4f065d9ba",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InputPressedBar",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4f331ec0-ef8a-46d6-972c-3448d4852de8",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InputPressedFire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

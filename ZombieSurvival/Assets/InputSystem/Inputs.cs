@@ -84,6 +84,52 @@ public class @Inputs : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""Actions"",
+            ""id"": ""c5af1cb8-9fb4-447c-80ad-a1d940ea8897"",
+            ""actions"": [
+                {
+                    ""name"": ""InputPressedBar"",
+                    ""type"": ""Button"",
+                    ""id"": ""0c1e29a3-ee9a-49d0-9546-3bd52f1d54c8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""InputPressedFire"",
+                    ""type"": ""Button"",
+                    ""id"": ""9c88d1d7-f308-4f34-8a29-a8f398b5dd27"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""e4920202-4801-4740-b0cf-03f4f065d9ba"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InputPressedBar"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4f331ec0-ef8a-46d6-972c-3448d4852de8"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InputPressedFire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -91,6 +137,10 @@ public class @Inputs : IInputActionCollection, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
+        // Actions
+        m_Actions = asset.FindActionMap("Actions", throwIfNotFound: true);
+        m_Actions_InputPressedBar = m_Actions.FindAction("InputPressedBar", throwIfNotFound: true);
+        m_Actions_InputPressedFire = m_Actions.FindAction("InputPressedFire", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -169,8 +219,54 @@ public class @Inputs : IInputActionCollection, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // Actions
+    private readonly InputActionMap m_Actions;
+    private IActionsActions m_ActionsActionsCallbackInterface;
+    private readonly InputAction m_Actions_InputPressedBar;
+    private readonly InputAction m_Actions_InputPressedFire;
+    public struct ActionsActions
+    {
+        private @Inputs m_Wrapper;
+        public ActionsActions(@Inputs wrapper) { m_Wrapper = wrapper; }
+        public InputAction @InputPressedBar => m_Wrapper.m_Actions_InputPressedBar;
+        public InputAction @InputPressedFire => m_Wrapper.m_Actions_InputPressedFire;
+        public InputActionMap Get() { return m_Wrapper.m_Actions; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(ActionsActions set) { return set.Get(); }
+        public void SetCallbacks(IActionsActions instance)
+        {
+            if (m_Wrapper.m_ActionsActionsCallbackInterface != null)
+            {
+                @InputPressedBar.started -= m_Wrapper.m_ActionsActionsCallbackInterface.OnInputPressedBar;
+                @InputPressedBar.performed -= m_Wrapper.m_ActionsActionsCallbackInterface.OnInputPressedBar;
+                @InputPressedBar.canceled -= m_Wrapper.m_ActionsActionsCallbackInterface.OnInputPressedBar;
+                @InputPressedFire.started -= m_Wrapper.m_ActionsActionsCallbackInterface.OnInputPressedFire;
+                @InputPressedFire.performed -= m_Wrapper.m_ActionsActionsCallbackInterface.OnInputPressedFire;
+                @InputPressedFire.canceled -= m_Wrapper.m_ActionsActionsCallbackInterface.OnInputPressedFire;
+            }
+            m_Wrapper.m_ActionsActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @InputPressedBar.started += instance.OnInputPressedBar;
+                @InputPressedBar.performed += instance.OnInputPressedBar;
+                @InputPressedBar.canceled += instance.OnInputPressedBar;
+                @InputPressedFire.started += instance.OnInputPressedFire;
+                @InputPressedFire.performed += instance.OnInputPressedFire;
+                @InputPressedFire.canceled += instance.OnInputPressedFire;
+            }
+        }
+    }
+    public ActionsActions @Actions => new ActionsActions(this);
     public interface IPlayerActions
     {
         void OnMovement(InputAction.CallbackContext context);
+    }
+    public interface IActionsActions
+    {
+        void OnInputPressedBar(InputAction.CallbackContext context);
+        void OnInputPressedFire(InputAction.CallbackContext context);
     }
 }

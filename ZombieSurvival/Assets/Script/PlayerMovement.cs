@@ -18,7 +18,9 @@ public class PlayerMovement : MonoBehaviour
 
     private Inputs _input;
 
+    private bool _inTrigger;
     private GameObject currentBar;
+
     private void Awake()
     {
         _input = new Inputs();
@@ -29,10 +31,12 @@ public class PlayerMovement : MonoBehaviour
         _input.Enable();
         _input.Player.Movement.performed += Movement;
         _input.Player.Movement.canceled += StopMovement;
+        _input.Actions.InputPressedBar.performed += InputPressedF;
     }
 
     void Start()
     {
+        _inTrigger = false;
         _movement = Vector2.zero;
         rigidBody = GetComponent<Rigidbody2D>();
         anime = GetComponent<Animator>();
@@ -88,56 +92,38 @@ public class PlayerMovement : MonoBehaviour
         _input.Disable();
         _input.Player.Movement.performed -= Movement;
         _input.Player.Movement.canceled -= StopMovement;
+        _input.Actions.InputPressedBar.performed -= InputPressedF;
     }
 
-
+    public void InputPressedF(InputAction.CallbackContext value)
+    {
+        if (_inTrigger && currentBar != null)
+        {
+            currentBar.transform.parent.GetComponent<BoxCollider2D>().enabled = true;
+            currentBar.transform.parent.GetComponent<SpriteRenderer>().enabled = true;
+        }
+    }
 
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("PlayerTrigger"))
+        if (collision.CompareTag("Structure"))
         {
             DisplayPrompt();
-            if (Input.GetKey(KeyCode.F))
-            {
-                transform.parent.GetComponent<BoxCollider2D>().enabled = true;
-                transform.parent.GetComponent<SpriteRenderer>().enabled = true;
-                currentBar = collision.gameObject;
-            }
+            _inTrigger = true;
+            currentBar = collision.gameObject;
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("PlayerTrigger"))
+        if (collision.CompareTag("Structure"))
         {
             HidePrompt();
+            _inTrigger = false;
+            currentBar = null;
         }
     }
 
 
 }
-
-//Tagged
-//{
-//    mouse = cam.ScreenToWorldPoint(Input.mousePosition);
-//    float angle = Mathf.Atan2(mouse.y - transform.position.y, mouse.x - transform.position.x) * Mathf.Rad2Deg;
-//    transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, angle);
-
-//    if (Input.GetAxis("Vertical") != 0)
-//    {
-//        rigidBody.velocity = new Vector2(0f, speed * Mathf.Sign(Input.GetAxis("Vertical")));
-//        anime.SetBool("idle", false);
-//        anime.SetBool("holdingGun", true);
-//    }
-
-//    if (Input.GetAxis("Horizontal") != 0)
-//    {
-//        rigidBody.velocity = new Vector2(speed * Mathf.Sign(Input.GetAxis("Horizontal")), 0f);
-//    }
-
-//    if (Input.GetAxis("Horizontal") + Input.GetAxis("Vertical") == 0 && !anime.GetBool("idle"))
-//    {
-//        anime.SetBool("idle", true);
-//    }
-//}
