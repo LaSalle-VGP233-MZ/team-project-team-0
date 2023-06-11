@@ -19,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
     private Inputs _input;
 
     private bool _inTrigger;
-    private GameObject currentBar;
+    public GameObject currentBar;
 
     private void Awake()
     {
@@ -99,8 +99,10 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_inTrigger && currentBar != null)
         {
-            currentBar.transform.parent.GetComponent<BoxCollider2D>().enabled = true;
-            currentBar.transform.parent.GetComponent<SpriteRenderer>().enabled = true;
+            currentBar.GetComponent<Health>().ResetHealth();
+            currentBar.GetComponent<SpriteRenderer>().enabled = true;
+            currentBar.GetComponent<BoxCollider2D>().enabled = true;
+            _inTrigger = false;
         }
     }
 
@@ -109,9 +111,13 @@ public class PlayerMovement : MonoBehaviour
     {
         if (collision.CompareTag("Structure"))
         {
-            DisplayPrompt();
-            _inTrigger = true;
-            currentBar = collision.gameObject;
+            GameObject barricade = collision.transform.parent.gameObject;
+            if (!barricade.GetComponent<BoxCollider2D>().enabled)
+            {
+                DisplayPrompt();
+                _inTrigger = true;
+                currentBar = barricade;
+            }
         }
     }
 

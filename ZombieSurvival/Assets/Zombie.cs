@@ -38,7 +38,7 @@ public class Zombie : MonoBehaviour
             collider.gameObject.GetComponent<Health>().ReduceHealth(damage);
             attackDelayTimer = attackDelay;
         }
-        if (collider.CompareTag("Structure"))
+        if (collider.CompareTag("Breakable"))
         {
             collider.gameObject.GetComponent<Health>().ReduceHealth(structureDamage);
             attackDelayTimer = attackDelay;

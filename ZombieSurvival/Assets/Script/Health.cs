@@ -17,7 +17,7 @@ public class Health : MonoBehaviour
     {
         if(currentHealth <= 0)
         {
-            if (gameObject.CompareTag("Structure"))
+            if (gameObject.CompareTag("Breakable"))
             {
                 gameObject.GetComponent<SpriteRenderer>().enabled = false;
                 gameObject.GetComponent<BoxCollider2D>().enabled = false;
@@ -31,5 +31,9 @@ public class Health : MonoBehaviour
     public void ReduceHealth(float amount)
     {
         currentHealth -= amount;
+    }
+    public void ResetHealth()
+    {
+        currentHealth = maxHealth;
     }
 }
