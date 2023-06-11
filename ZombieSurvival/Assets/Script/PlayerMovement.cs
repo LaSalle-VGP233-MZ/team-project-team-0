@@ -32,6 +32,8 @@ public class PlayerMovement : MonoBehaviour
         _input.Player.Movement.performed += Movement;
         _input.Player.Movement.canceled += StopMovement;
         _input.Actions.InputPressedBar.performed += InputPressedF;
+        _input.Actions.InputPressedFire.performed += PressedFire;
+        _input.Actions.InputPressedFire.canceled += ReleasedFire;
     }
 
     void Start()
@@ -93,6 +95,8 @@ public class PlayerMovement : MonoBehaviour
         _input.Player.Movement.performed -= Movement;
         _input.Player.Movement.canceled -= StopMovement;
         _input.Actions.InputPressedBar.performed -= InputPressedF;
+        _input.Actions.InputPressedFire.performed -= PressedFire;
+        _input.Actions.InputPressedFire.canceled -= ReleasedFire;
     }
 
     public void InputPressedF(InputAction.CallbackContext value)
@@ -106,6 +110,15 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void PressedFire(InputAction.CallbackContext value)
+    {
+
+    }
+
+    public void ReleasedFire(InputAction.CallbackContext value)
+    {
+
+    }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
