@@ -3,19 +3,21 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Structure
+  - Breakable
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Obstacles
   - Water
   - UI
   - Player
   - Map
-  - 
-  - 
-  - 
+  - PlayerObstacles
+  - PlayerTrigger
+  - Zombies
   - 
   - 
   - 
@@ -40,4 +42,13 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Floor
+    uniqueID: 2694250463
+    locked: 0
+  - name: Walls
+    uniqueID: 4058768217
+    locked: 0
+  - name: Player
+    uniqueID: 1251635387
     locked: 0
