@@ -50,6 +50,7 @@ public class ObjPool : MonoBehaviour
     {
         GameObject obj = Instantiate(_objPool);
         obj.SetActive(false);
+        obj.transform.parent = this.transform;
         _pool.Enqueue(obj);
     }
 }

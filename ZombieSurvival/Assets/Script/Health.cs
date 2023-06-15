@@ -6,6 +6,10 @@ public class Health : MonoBehaviour
 {
     [SerializeField] private float maxHealth;
     private float currentHealth;
+
+    public delegate void ZombieDied();
+    public static event ZombieDied OnZombieDied;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,9 +26,15 @@ public class Health : MonoBehaviour
                 gameObject.GetComponent<SpriteRenderer>().enabled = false;
                 gameObject.GetComponent<BoxCollider2D>().enabled = false;
             }
-            else
+            else if (gameObject.CompareTag("Player"))
             {
                 gameObject.SetActive(false);
+            }
+            else if (gameObject.CompareTag("Zombie"))
+            {
+                gameObject.GetComponent<Health>().ResetHealth();
+                gameObject.SetActive(false);
+                TriggerZombieDied();
             }
         }
     }
@@ -35,5 +45,12 @@ public class Health : MonoBehaviour
     public void ResetHealth()
     {
         currentHealth = maxHealth;
+    }
+    public void TriggerZombieDied()
+    {
+        if (OnZombieDied != null)
+        {
+            OnZombieDied();
+        }
     }
 }

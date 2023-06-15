@@ -17,9 +17,11 @@ public class PlayerMovement : MonoBehaviour
     Vector3 mouse;
 
     private Inputs _input;
-
     private bool _inTrigger;
     public GameObject currentBar;
+    private float barricadeHoldTimer = 2f;
+    private float barricadeHoldCount = 0;
+
 
     private void Awake()
     {
