@@ -36,6 +36,13 @@ public class PlayerMovement : MonoBehaviour
     Animator anime;
     Vector3 mouse;
 
+    [SerializeField] private float gunDamage = 1;
+    [SerializeField] private float gunRange = 4.5f;
+    [SerializeField] private float ammo = 10;
+    [SerializeField] private float rateOfFire = 0.2f;
+    [SerializeField] private float timeTilFire = 0f;
+    [SerializeField] private AudioClip clip;
+
     private Inputs _input;
 
     private bool _inTrigger;
@@ -182,6 +189,7 @@ public class PlayerMovement : MonoBehaviour
             Vector3 mouseDir = new Vector3(mouse.x - transform.position.x, mouse.y - transform.position.y, 0f).normalized;
             mouseDir *= gunRange;
             Debug.DrawRay(transform.position, mouseDir, Color.red, 0.3f);
+<<<<<<< Updated upstream
             RaycastHit2D hit = Physics2D.Raycast(transform.position, mouseDir);
             if (hit.collider.gameObject.CompareTag("Zombie"))
             {
@@ -189,12 +197,28 @@ public class PlayerMovement : MonoBehaviour
                 ammo++;
             }
             ammo--;
+=======
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, mouseDir, gunRange * 2, LayerMask.GetMask("Map", "Zombies"));
+            if (hit.collider.gameObject.CompareTag("Zombie"))
+            {
+                hit.collider.GetComponent<Health>().ReduceHealth(gunDamage);
+                Debug.Log("bang");
+                ammo++;
+            }
+            ammo--;
+            AudioSource.PlayClipAtPoint(clip, new Vector3(0, 0, 0));
+>>>>>>> Stashed changes
         }
     }
 
     public void ReleasedFire(InputAction.CallbackContext value)
     {
+<<<<<<< Updated upstream
         timeTilFire = rateOfFire;
+=======
+        if (timeTilFire <= 0)
+            timeTilFire = rateOfFire;
+>>>>>>> Stashed changes
     }
 
     private void OnTriggerStay2D(Collider2D collision)
