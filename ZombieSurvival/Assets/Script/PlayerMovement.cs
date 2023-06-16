@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using TMPro;
+using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,6 +22,12 @@ public class PlayerMovement : MonoBehaviour
     //Gun Damage / Gun Range / Gun Ammo / Rate of Fire
     private Vector4[] statBlocks = { new Vector4(3.4f, 8f, 10, 0.2f), new Vector4(6f, 14f, 10, 0.05f), new Vector4(18f, 5f, 10, 0.75f) };
     private float timeTilFire = 0f;
+
+
+    [SerializeField] private TextMeshProUGUI ammoDisplay;
+    [SerializeField] private Image ammoIcon;
+
+    [SerializeField] private Sprite[] bulletIcons;
     [SerializeField] private AudioClip[] bulletNoise;
     [SerializeField] private AudioClip empty;
 
@@ -50,6 +58,9 @@ public class PlayerMovement : MonoBehaviour
         _movement = Vector2.zero;
         rigidBody = GetComponent<Rigidbody2D>();
         anime = GetComponent<Animator>();
+
+        ammoDisplay.text = statBlocks[currentGun].z.ToString();
+        ammoIcon.sprite = bulletIcons[currentGun];
     }
 
     private void FixedUpdate()
@@ -147,6 +158,9 @@ public class PlayerMovement : MonoBehaviour
             AudioSource.PlayClipAtPoint(empty, new Vector3(0, 0, 0));
             timeTilFire = statBlocks[currentGun].w;
         }
+
+        ammoDisplay.text = statBlocks[currentGun].z.ToString();
+        ammoIcon.sprite = bulletIcons[currentGun];
     }
 
     public void ReleasedFire(InputAction.CallbackContext value)
