@@ -16,6 +16,13 @@ public class PlayerMovement : MonoBehaviour
     Animator anime;
     Vector3 mouse;
 
+    [SerializeField] private float gunDamage = 1;
+    [SerializeField] private float gunRange = 4.5f;
+    [SerializeField] private float ammo = 10;
+    [SerializeField] private float rateOfFire = 0.2f;
+    private float timeTilFire = 0f;
+    [SerializeField] private AudioClip clip;
+
     private Inputs _input;
     private bool _inTrigger;
     public GameObject currentBar;
@@ -57,7 +64,10 @@ public class PlayerMovement : MonoBehaviour
         float angle = Mathf.Atan2(mouse.y - transform.position.y, mouse.x - transform.position.x) * Mathf.Rad2Deg;
         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, angle);
 
-       SetAnimStates();
+        if (timeTilFire > 0)
+            timeTilFire -= Time.deltaTime;
+
+        SetAnimStates();
     }
 
     private void SetAnimStates()
@@ -114,7 +124,20 @@ public class PlayerMovement : MonoBehaviour
 
     public void PressedFire(InputAction.CallbackContext value)
     {
-
+        if (timeTilFire <= 0 && ammo > 0)
+        {
+            Vector3 mouseDir = new Vector3(mouse.x - transform.position.x, mouse.y - transform.position.y, 0f).normalized;
+            mouseDir *= gunRange;
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, mouseDir, gunRange * 2, LayerMask.GetMask("Map", "Zombies"));
+            if (hit.collider.gameObject.CompareTag("Zombie"))
+            {
+                hit.collider.GetComponent<Health>().ReduceHealth(gunDamage);
+                ammo++;
+            }
+            ammo--;
+            AudioSource.PlayClipAtPoint(clip, new Vector3(0, 0, 0));
+            timeTilFire = rateOfFire;
+        }
     }
 
     public void ReleasedFire(InputAction.CallbackContext value)
@@ -145,6 +168,4 @@ public class PlayerMovement : MonoBehaviour
             currentBar = null;
         }
     }
-
-
 }
