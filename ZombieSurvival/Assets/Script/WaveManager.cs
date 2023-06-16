@@ -55,7 +55,7 @@ public class WaveManager : MonoBehaviour
             case WaveState.CoolDown:
                 waveCountdown -= Time.deltaTime;
                 countDownText.gameObject.SetActive(true);
-                countDownText.text = ((int)waveCountdown).ToString();
+                countDownText.text = ("Time until next wave: " + ((int)waveCountdown).ToString() + "s");
                 if (waveCountdown <= 0)
                 {
                     waveCount++;
