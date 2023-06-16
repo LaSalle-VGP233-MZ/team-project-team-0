@@ -15,27 +15,35 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private GameObject zombiePool;
     [SerializeField] private int waveCooldownTime;
     [SerializeField] private int maxZombiesAtOnce;
+    [SerializeField] private float spawnDelay = 3f;
+
     [SerializeField] private Transform zombieSpawnPoints;
     [SerializeField] private TextMeshProUGUI countDownText;
     [SerializeField] private TextMeshProUGUI roundNumberText;
     [SerializeField] private TextMeshProUGUI zombieCounterText;
 
-
-
     private float waveCountdown = 0f;
-    private int waveCount = 1;
+    private int waveCount = 0;
     private int totalZombieWaveCount;
     private int zombiesKilledThisWave = 0;
     private int zombiesLeft;
     private WaveState waveState;
     private int numOfZombies;
-
+    private float spawnDelayCounter;
 
     // Start is called before the first frame update
-    void Start()
+    private void OnEnable()
     {
         Health.OnZombieDied += UpdateZombieAmount;
+    }
+    private void OnDisable()
+    {
+        Health.OnZombieDied -= UpdateZombieAmount;
+    }
+    void Start()
+    {
         waveState = WaveState.CoolDown;
+        waveCountdown = waveCooldownTime;
     }
 
     // Update is called once per frame
@@ -50,6 +58,7 @@ public class WaveManager : MonoBehaviour
                 countDownText.text = ((int)waveCountdown).ToString();
                 if (waveCountdown <= 0)
                 {
+                    waveCount++;
                     waveCountdown = waveCooldownTime;
                     CalculateZombies();
                     countDownText.gameObject.SetActive(false);
@@ -60,21 +69,22 @@ public class WaveManager : MonoBehaviour
             case WaveState.Active:
                 zombieCounterText.gameObject.SetActive(true);
                 zombiesLeft = totalZombieWaveCount - zombiesKilledThisWave;
-                zombieCounterText.text = "Zombies: " + zombiesLeft.ToString() + "/" + totalZombieWaveCount;
+                zombieCounterText.text = "Zombies Left: " + zombiesLeft.ToString() + "/" + totalZombieWaveCount;
                 if (numOfZombies < maxZombiesAtOnce)
                 {
-                    int zombieSpawnAmount = totalZombieWaveCount - numOfZombies;
-                    if(zombieSpawnAmount >= 0)
+                    if(zombiesLeft > 0 && spawnDelayCounter <= 0)
                     {
-                        SpawnZombies(zombieSpawnAmount);
+                        SpawnZombies(Mathf.Clamp((maxZombiesAtOnce - numOfZombies),1,5));
+                        spawnDelayCounter = spawnDelay;
                     }
-                    else if (numOfZombies <= 0)
+                    else if (zombiesLeft <= 0)
                     {
-                        waveCount++;
+                        spawnDelayCounter = 0;
                         zombiesKilledThisWave = 0;
                         zombieCounterText.gameObject.SetActive(false);
                         waveState = WaveState.CoolDown;
                     }
+                    spawnDelayCounter -= Time.deltaTime;
                 }
                 break;
         }
@@ -99,9 +109,8 @@ public class WaveManager : MonoBehaviour
     }
     private void CalculateZombies()
     {
-        float multiplier = waveCount * 5f;
-        totalZombieWaveCount = (int)(multiplier * waveCount);
-        
+        float multiplier = waveCount * 0.15f;
+        totalZombieWaveCount = (int)(multiplier * maxZombiesAtOnce);
     }
     private void UpdateZombieAmount()
     {

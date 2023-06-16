@@ -5,14 +5,16 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     [SerializeField] private float maxHealth;
-    private float currentHealth;
+    [SerializeField] private float currentHealth;
 
+    private GameObject objPool;
     public delegate void ZombieDied();
     public static event ZombieDied OnZombieDied;
 
     // Start is called before the first frame update
     void Start()
     {
+        objPool = GameObject.Find("ZombiePool");
         currentHealth = maxHealth;
     }
 
@@ -33,6 +35,7 @@ public class Health : MonoBehaviour
             else if (gameObject.CompareTag("Zombie"))
             {
                 gameObject.GetComponent<Health>().ResetHealth();
+                objPool.GetComponent<ObjPool>().ReturnToQueue(gameObject);
                 gameObject.SetActive(false);
                 TriggerZombieDied();
             }
