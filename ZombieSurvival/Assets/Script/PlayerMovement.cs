@@ -16,19 +16,18 @@ public class PlayerMovement : MonoBehaviour
     Animator anime;
     Vector3 mouse;
 
-    [SerializeField] private float gunDamage = 1;
-    [SerializeField] private float gunRange = 4.5f;
-    [SerializeField] private float ammo = 10;
-    [SerializeField] private float rateOfFire = 0.2f;
+    private int currentGun = 2;
+    //Gun Damage / Gun Range / Gun Ammo / Rate of Fire
+    private Vector4[] statBlocks = { new Vector4(3.4f, 8f, 10, 0.2f), new Vector4(6f, 14f, 10, 0.05f), new Vector4(18f, 5f, 10, 0.75f) };
     private float timeTilFire = 0f;
-    [SerializeField] private AudioClip clip;
+    [SerializeField] private AudioClip[] bulletNoise;
+    [SerializeField] private AudioClip empty;
 
     private Inputs _input;
     private bool _inTrigger;
     public GameObject currentBar;
     private float barricadeHoldTimer = 2f;
     private float barricadeHoldCount = 0;
-
 
     private void Awake()
     {
@@ -64,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
         float angle = Mathf.Atan2(mouse.y - transform.position.y, mouse.x - transform.position.x) * Mathf.Rad2Deg;
         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, angle);
 
-        if (timeTilFire > 0)
+        if (timeTilFire > -1)
             timeTilFire -= Time.deltaTime;
 
         SetAnimStates();
@@ -124,19 +123,29 @@ public class PlayerMovement : MonoBehaviour
 
     public void PressedFire(InputAction.CallbackContext value)
     {
-        if (timeTilFire <= 0 && ammo > 0)
+        if (timeTilFire <= 0 && statBlocks[currentGun].z > 0)
         {
             Vector3 mouseDir = new Vector3(mouse.x - transform.position.x, mouse.y - transform.position.y, 0f).normalized;
-            mouseDir *= gunRange;
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, mouseDir, gunRange * 2, LayerMask.GetMask("Map", "Zombies"));
-            if (hit.collider.gameObject.CompareTag("Zombie"))
+            mouseDir *= statBlocks[currentGun].y;
+            Debug.DrawRay(transform.position, mouseDir, Color.red, 0.3f);
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, mouseDir, statBlocks[currentGun].y * 2, LayerMask.GetMask("Map", "Zombies"));
+            if (hit.collider != null)
             {
-                hit.collider.GetComponent<Health>().ReduceHealth(gunDamage);
-                ammo++;
+                if (hit.collider.gameObject.CompareTag("Zombie"))
+                {
+                    hit.collider.GetComponent<Health>().ReduceHealth(statBlocks[currentGun].x);
+                    statBlocks[currentGun].z++;
+                }
             }
-            ammo--;
-            AudioSource.PlayClipAtPoint(clip, new Vector3(0, 0, 0));
-            timeTilFire = rateOfFire;
+
+            statBlocks[currentGun].z--;
+            AudioSource.PlayClipAtPoint(bulletNoise[currentGun], new Vector3(0, 0, 0));
+            timeTilFire = statBlocks[currentGun].w;
+        }
+        else if (statBlocks[currentGun].z <= 0)
+        {
+            AudioSource.PlayClipAtPoint(empty, new Vector3(0, 0, 0));
+            timeTilFire = statBlocks[currentGun].w;
         }
     }
 
