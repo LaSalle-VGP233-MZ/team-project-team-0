@@ -23,7 +23,16 @@ public class ObjPool : MonoBehaviour
             CreateObjInPool();
         }
     }
+    //private void Update()
+    //{
+    //    for(int i =0; i< transform.childCount; i++)
+    //    {
+    //        if(transform.GetChild(i).gameObject.activeSelf == false)
+    //        {
 
+    //        }
+    //    }
+    //}
     public GameObject GiveMeAnObjAt(Vector3 pos)
     {
         if(_pool.Count != 0)
@@ -50,6 +59,7 @@ public class ObjPool : MonoBehaviour
     {
         GameObject obj = Instantiate(_objPool);
         obj.SetActive(false);
+        obj.transform.parent = this.transform;
         _pool.Enqueue(obj);
     }
 }

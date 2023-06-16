@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Structure
   - Breakable
+  - Zombie
   layers:
   - Default
   - TransparentFX
@@ -48,6 +49,9 @@ TagManager:
     locked: 0
   - name: Walls
     uniqueID: 4058768217
+    locked: 0
+  - name: Zombies
+    uniqueID: 4185662895
     locked: 0
   - name: Player
     uniqueID: 1251635387
