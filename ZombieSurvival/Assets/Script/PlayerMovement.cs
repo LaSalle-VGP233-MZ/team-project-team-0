@@ -6,6 +6,12 @@ using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+public enum GunType
+{
+    Pistol,
+    Rifle,
+    Shotgun
+}
 public class PlayerMovement : MonoBehaviour
 {
     Rigidbody2D rigidBody;
@@ -18,13 +24,15 @@ public class PlayerMovement : MonoBehaviour
     Animator anime;
     Vector3 mouse;
 
-    private int currentGun = 2;
+    private GunType currentGun = GunType.Pistol;
     //Gun Damage / Gun Range / Gun Ammo / Rate of Fire
-    private Vector4[] statBlocks = { new Vector4(3.4f, 8f, 10, 0.2f), new Vector4(6f, 14f, 10, 0.05f), new Vector4(18f, 5f, 10, 0.75f) };
+    private Vector4[] statBlocks = { new Vector4(5f, 8f, 10, 0.2f), new Vector4(8f, 14f, 10, 0.05f), new Vector4(20f, 5f, 10, 0.75f) };
     private float timeTilFire = 0f;
 
 
     [SerializeField] private TextMeshProUGUI ammoDisplay;
+    [SerializeField] private TextMeshProUGUI pointsDisplay;
+
     [SerializeField] private Image ammoIcon;
 
     [SerializeField] private Sprite[] bulletIcons;
@@ -33,9 +41,11 @@ public class PlayerMovement : MonoBehaviour
 
     private Inputs _input;
     private bool _inTrigger;
-    public GameObject currentBar;
+    public GameObject interactObject;
     private float barricadeHoldTimer = 2f;
     private float barricadeHoldCount = 0;
+
+    private int points = 100;
 
     private void Awake()
     {
@@ -59,8 +69,8 @@ public class PlayerMovement : MonoBehaviour
         rigidBody = GetComponent<Rigidbody2D>();
         anime = GetComponent<Animator>();
 
-        ammoDisplay.text = statBlocks[currentGun].z.ToString();
-        ammoIcon.sprite = bulletIcons[currentGun];
+        ammoDisplay.text = statBlocks[(int)currentGun].z.ToString();
+        ammoIcon.sprite = bulletIcons[(int)currentGun];
     }
 
     private void FixedUpdate()
@@ -78,6 +88,9 @@ public class PlayerMovement : MonoBehaviour
             timeTilFire -= Time.deltaTime;
 
         SetAnimStates();
+        ammoDisplay.text = statBlocks[(int)currentGun].z.ToString();
+        ammoIcon.sprite = bulletIcons[(int)currentGun];
+        pointsDisplay.text =  "Points: " + points.ToString();
     }
 
     private void SetAnimStates()
@@ -123,44 +136,52 @@ public class PlayerMovement : MonoBehaviour
 
     public void InputPressedF(InputAction.CallbackContext value)
     {
-        if (_inTrigger && currentBar != null)
+        if (_inTrigger && interactObject.CompareTag("Structure"))
         {
-            currentBar.GetComponent<Health>().ResetHealth();
-            currentBar.GetComponent<SpriteRenderer>().enabled = true;
-            currentBar.GetComponent<BoxCollider2D>().enabled = true;
+            interactObject.GetComponent<Health>().ResetHealth();
+            interactObject.GetComponent<SpriteRenderer>().enabled = true;
+            interactObject.GetComponent<BoxCollider2D>().enabled = true;
+            _inTrigger = false;
+        }
+        else if (_inTrigger && interactObject.CompareTag("Gun"))
+        {
+            PurchaseGun(interactObject);
             _inTrigger = false;
         }
     }
 
     public void PressedFire(InputAction.CallbackContext value)
     {
-        if (timeTilFire <= 0 && statBlocks[currentGun].z > 0)
+        if (timeTilFire <= 0 && statBlocks[(int)currentGun].z > 0)
         {
             Vector3 mouseDir = new Vector3(mouse.x - transform.position.x, mouse.y - transform.position.y, 0f).normalized;
-            mouseDir *= statBlocks[currentGun].y;
+            mouseDir *= statBlocks[(int)currentGun].y;
             Debug.DrawRay(transform.position, mouseDir, Color.red, 0.3f);
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, mouseDir, statBlocks[currentGun].y * 2, LayerMask.GetMask("Map", "Zombies"));
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, mouseDir, statBlocks[(int)currentGun].y * 2, LayerMask.GetMask("Map", "Zombies"));
             if (hit.collider != null)
             {
                 if (hit.collider.gameObject.CompareTag("Zombie"))
                 {
-                    hit.collider.GetComponent<Health>().ReduceHealth(statBlocks[currentGun].x);
-                    statBlocks[currentGun].z++;
+                    hit.collider.GetComponent<Health>().ReduceHealth(statBlocks[(int)currentGun].x);
+                    statBlocks[(int)currentGun].z++;
+                    hit.collider.GetComponent<Health>().ReduceHealth(statBlocks[(int)currentGun].x);
+                    statBlocks[(int)currentGun].z++;
+                    points += (int)statBlocks[(int)currentGun].x;
                 }
             }
 
-            statBlocks[currentGun].z--;
-            AudioSource.PlayClipAtPoint(bulletNoise[currentGun], new Vector3(0, 0, 0));
-            timeTilFire = statBlocks[currentGun].w;
+            statBlocks[(int)currentGun].z--;
+            AudioSource.PlayClipAtPoint(bulletNoise[(int)currentGun], new Vector3(0, 0, 0));
+            timeTilFire = statBlocks[(int)currentGun].w;
         }
-        else if (statBlocks[currentGun].z <= 0)
+        else if (statBlocks[(int)currentGun].z <= 0)
         {
             AudioSource.PlayClipAtPoint(empty, new Vector3(0, 0, 0));
-            timeTilFire = statBlocks[currentGun].w;
+            timeTilFire = statBlocks[(int)currentGun].w;
         }
 
-        ammoDisplay.text = statBlocks[currentGun].z.ToString();
-        ammoIcon.sprite = bulletIcons[currentGun];
+        ammoDisplay.text = statBlocks[(int)currentGun].z.ToString();
+        ammoIcon.sprite = bulletIcons[(int)currentGun];
     }
 
     public void ReleasedFire(InputAction.CallbackContext value)
@@ -177,8 +198,15 @@ public class PlayerMovement : MonoBehaviour
             {
                 DisplayPrompt();
                 _inTrigger = true;
-                currentBar = barricade;
+                interactObject = barricade;
             }
+        }
+        else if (collision.CompareTag("Gun"))
+        {
+            GameObject gun = collision.gameObject;
+            DisplayPrompt();
+            _inTrigger = true;
+            interactObject = gun;
         }
     }
 
@@ -188,7 +216,24 @@ public class PlayerMovement : MonoBehaviour
         {
             HidePrompt();
             _inTrigger = false;
-            currentBar = null;
+            interactObject = null;
+        }
+    }
+    public void PurchaseGun(GameObject gunObject)
+    {
+        int price = gunObject.GetComponent<GunPurchase>().price;
+        GunType newGun = gunObject.GetComponent<GunPurchase>().gunType;
+        if (price <= points)
+        {
+            if (newGun == currentGun)
+            {
+                statBlocks[(int)currentGun].z = 10;
+            }
+            else
+            {
+                currentGun = newGun;
+            }
+            points -= price;
         }
     }
 }

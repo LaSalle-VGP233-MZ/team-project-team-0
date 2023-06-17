@@ -7,7 +7,7 @@ public class GunPurchase : MonoBehaviour
 {
     [SerializeField] public GunType gunType;
     [SerializeField] private Sprite pistolSprite;
-    [SerializeField] private Sprite arSprite;
+    [SerializeField] private Sprite rifleSprite;
     [SerializeField] private Sprite shotGunSprite;
     [SerializeField] private int pistolCost;
     [SerializeField] private int arCost;
@@ -32,8 +32,8 @@ public class GunPurchase : MonoBehaviour
                 GetComponentInChildren<SpriteRenderer>().sprite = pistolSprite;
                 price = pistolCost;
                 break;
-            case GunType.AR:
-                GetComponentInChildren<SpriteRenderer>().sprite = arSprite;
+            case GunType.Rifle:
+                GetComponentInChildren<SpriteRenderer>().sprite = rifleSprite;
                 price = arCost;
                 break;
             case GunType.Shotgun:
