@@ -85,7 +85,7 @@ public class PlayerMovement : MonoBehaviour
             timeTilFire -= Time.deltaTime;
 
         SetAnimStates();
-        Debug.Log(barricadeHoldCount);
+
         TimerBarricade();
     }
 
@@ -160,6 +160,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     hit.collider.GetComponent<Health>().ReduceHealth(statBlocks[(int)currentGun].x);
                     statBlocks[(int)currentGun].z++;
+                    hit.collider.GetComponent<ParticleSystem>().Play();
                 }
             }
 
