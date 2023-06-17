@@ -15,7 +15,7 @@ public class Shooting : MonoBehaviour
     [Header("Input Alocation")]
     [SerializeField]
     private InputActionReference _input;
-
+    [SerializeField] private GameObject pauseScreen;
     private Vector3 mouse;
 
     //Gun Damage / Gun Range / Gun Ammo / Rate of Fire
@@ -54,7 +54,6 @@ public class Shooting : MonoBehaviour
         statBlocks[0] = statBlocksDefault[0];
         statBlocks[1] = statBlocksDefault[1];
         statBlocks[2] = statBlocksDefault[2];
-        statBlocks[3] = statBlocksDefault[3];
 
         timeTilFire = 0.0f;
         points = 0;
@@ -85,7 +84,7 @@ public class Shooting : MonoBehaviour
 
     public void PressedFire(InputAction.CallbackContext value)
     {
-        if (timeTilFire <= 0 && statBlocks[(int)currentGun].z > 0)
+        if (timeTilFire <= 0 && statBlocks[(int)currentGun].z > 0 && !pauseScreen.activeSelf)
         {
             animator.SetTrigger("shoot");
             gunShotLight.Play();

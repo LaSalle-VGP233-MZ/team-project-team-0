@@ -11,7 +11,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Input Alocation")]
     [SerializeField]
     private InputActionReference _input;
-
+    [SerializeField] GameObject pauseScreen;
     [Header("Movement")]
     [SerializeField] float speed;
 
@@ -48,9 +48,10 @@ public class PlayerMovement : MonoBehaviour
         mouse = cam.ScreenToWorldPoint(Mouse.current.position.ReadValue());
 
         float angle = Mathf.Atan2(mouse.y - transform.position.y, mouse.x - transform.position.x) * Mathf.Rad2Deg;
-
-        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, angle);
-
+        if (!pauseScreen.activeSelf)
+        {
+            transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, transform.localEulerAngles.y, angle);
+        }
 
         SetAnimStates();
     }

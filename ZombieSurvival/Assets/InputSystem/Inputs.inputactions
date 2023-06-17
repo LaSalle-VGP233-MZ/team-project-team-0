@@ -107,6 +107,17 @@
                 },
                 {
                     "name": "",
+                    "id": "430f613c-38b0-42f7-9c6e-8483b0a9de0f",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InputPressedBar",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "4f331ec0-ef8a-46d6-972c-3448d4852de8",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",

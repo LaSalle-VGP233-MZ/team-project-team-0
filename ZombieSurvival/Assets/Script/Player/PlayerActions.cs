@@ -8,6 +8,7 @@ public class PlayerActions : MonoBehaviour
     [Header("Input Alocation")]
     [SerializeField]
     private InputActionReference _input;
+    [SerializeField] GameObject pauseScreen;
 
     [Header("Player Shooting Script")]
     [SerializeField]
@@ -34,6 +35,7 @@ public class PlayerActions : MonoBehaviour
         animator = GetComponent<Animator>();
         _input.action.Enable();
         _input.action.performed += InputPressedF;
+        _input.action.performed += InputPressedEscape;
         _input.action.canceled += InputLeaveF;
     }
 
@@ -88,6 +90,7 @@ public class PlayerActions : MonoBehaviour
     {
         _input.action.Disable();
         _input.action.performed -= InputPressedF;
+        _input.action.performed -= InputPressedEscape;
         _input.action.canceled -= InputLeaveF;
     }
 
@@ -104,7 +107,19 @@ public class PlayerActions : MonoBehaviour
             _inTrigger = false;
         }
     }
-
+    public void InputPressedEscape(InputAction.CallbackContext value)
+    {
+        if (!pauseScreen.activeSelf)
+        {
+            pauseScreen.SetActive(true);
+            Time.timeScale = 0;
+        }
+        else
+        {
+            pauseScreen.SetActive(false);
+            Time.timeScale = 1;
+        }
+    }
     //------------------------------------------Methods----------------------------------
     private void InputLeaveF(InputAction.CallbackContext value)
     {
