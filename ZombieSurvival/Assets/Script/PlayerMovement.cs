@@ -41,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
     public GameObject currentBar;
     private float barricadeHoldTimer = 2f;
     private float barricadeHoldCount = 0;
+    private bool isBarricadeHolding = false;
 
     private void Awake()
     {
@@ -53,6 +54,7 @@ public class PlayerMovement : MonoBehaviour
         _input.Player.Movement.performed += Movement;
         _input.Player.Movement.canceled += StopMovement;
         _input.Actions.InputPressedBar.performed += InputPressedF;
+        _input.Actions.InputPressedBar.canceled += InputLeaveF;
         _input.Actions.InputPressedFire.performed += PressedFire;
         _input.Actions.InputPressedFire.canceled += ReleasedFire;
     }
@@ -83,6 +85,8 @@ public class PlayerMovement : MonoBehaviour
             timeTilFire -= Time.deltaTime;
 
         SetAnimStates();
+        Debug.Log(barricadeHoldCount);
+        TimerBarricade();
     }
 
     private void SetAnimStates()
@@ -121,7 +125,8 @@ public class PlayerMovement : MonoBehaviour
         _input.Disable();
         _input.Player.Movement.performed -= Movement;
         _input.Player.Movement.canceled -= StopMovement;
-        _input.Actions.InputPressedBar.performed -= InputPressedF;
+        _input.Actions.InputPressedBar.performed -= InputPressedF; 
+        _input.Actions.InputPressedBar.canceled -= InputLeaveF;
         _input.Actions.InputPressedFire.performed -= PressedFire;
         _input.Actions.InputPressedFire.canceled -= ReleasedFire;
     }
@@ -130,21 +135,25 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_inTrigger && currentBar != null)
         {
-            currentBar.GetComponent<Health>().ResetHealth();
-            currentBar.GetComponent<SpriteRenderer>().enabled = true;
-            currentBar.GetComponent<BoxCollider2D>().enabled = true;
-            _inTrigger = false;
+            isBarricadeHolding = true;
         }
+    }
+
+    private void InputLeaveF(InputAction.CallbackContext value)
+    {
+        barricadeHoldCount = 0;
+        isBarricadeHolding = false;
     }
 
     public void PressedFire(InputAction.CallbackContext value)
     {
         if (timeTilFire <= 0 && statBlocks[(int)currentGun].z > 0)
         {
-            Vector3 mouseDir = new Vector3(mouse.x - transform.position.x, mouse.y - transform.position.y, 0f).normalized;
-            mouseDir *= statBlocks[(int)currentGun].y;
+            Vector3 mouseDir = (mouse - transform.position).normalized * statBlocks[(int)currentGun].y;
+            mouseDir.z = 0;
             Debug.DrawRay(transform.position, mouseDir, Color.red, 0.3f);
             RaycastHit2D hit = Physics2D.Raycast(transform.position, mouseDir, statBlocks[(int)currentGun].y * 2, LayerMask.GetMask("Map", "Zombies"));
+
             if (hit.collider != null)
             {
                 if (hit.collider.gameObject.CompareTag("Zombie"))
@@ -194,6 +203,24 @@ public class PlayerMovement : MonoBehaviour
             HidePrompt();
             _inTrigger = false;
             currentBar = null;
+        }
+    }
+
+    private void TimerBarricade()
+    {
+        if (isBarricadeHolding)
+        {
+            barricadeHoldCount += Time.deltaTime;
+        }
+
+        if (barricadeHoldCount >= barricadeHoldTimer && currentBar != null)
+        {
+            currentBar.GetComponent<Health>().ResetHealth();
+            currentBar.GetComponent<SpriteRenderer>().enabled = true;
+            currentBar.GetComponent<BoxCollider2D>().enabled = true;
+            _inTrigger = false;
+            barricadeHoldCount = 0;
+            isBarricadeHolding = false;
         }
     }
 }
