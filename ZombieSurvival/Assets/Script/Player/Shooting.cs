@@ -7,12 +7,11 @@ using UnityEngine.InputSystem;
 
 public class Shooting : MonoBehaviour
 {
+    [Header("Input Alocation")]
     [SerializeField]
     private InputActionReference _input;
-    private Vector3 mouse;
-    private int points;
 
-    private Vector4[] statBlocks = { new Vector4(5f, 8f, 10, 0.2f), new Vector4(10f, 14f, 10, 0.05f), new Vector4(20f, 5f, 10, 0.75f) };
+    private Vector3 mouse;
 
     //Gun Damage / Gun Range / Gun Ammo / Rate of Fire
     private float timeTilFire;
@@ -20,7 +19,7 @@ public class Shooting : MonoBehaviour
     [SerializeField] Camera cam;
 
     [Header("Gun's Variables")]
-    [SerializeField] private GunType currentGun = GunType.Pistol;
+    [SerializeField] public GunType currentGun = GunType.Pistol;
     [SerializeField] private TextMeshProUGUI ammoDisplay;
     [SerializeField] private TextMeshProUGUI pointsDisplay;
     [SerializeField] private Image ammoIcon;
@@ -29,6 +28,11 @@ public class Shooting : MonoBehaviour
     [SerializeField] private Sprite[] bulletIcons;
     [SerializeField] private AudioClip[] bulletNoise;
 
+    public Vector4[] statBlocks = { new Vector4(5f, 8f, 10, 0.2f), new Vector4(10f, 14f, 10, 0.05f), new Vector4(20f, 5f, 10, 0.75f) };
+
+
+    [Header("Character's Earnings")]
+    public int points;
 
     private void OnEnable()
     {
@@ -67,7 +71,7 @@ public class Shooting : MonoBehaviour
 
     public void PressedFire(InputAction.CallbackContext value)
     {
-        Debug.Log("idddddddddd");
+
         if (timeTilFire <= 0 && statBlocks[(int)currentGun].z > 0)
         {
             gunShotLight.Play();

@@ -5878,6 +5878,7 @@ GameObject:
   - component: {fileID: 1469157722}
   - component: {fileID: 1469157721}
   - component: {fileID: 1469157730}
+  - component: {fileID: 1469157731}
   - component: {fileID: 1469157720}
   - component: {fileID: 1469157727}
   - component: {fileID: 1469157729}
@@ -5915,11 +5916,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7036b78e776f6444eab9b806ec2c5291, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movement: {x: 0, y: 0}
+  _input: {fileID: 6521473380881287192, guid: 765f3e10462abc24e8c9d2cd45ee1662, type: 3}
   speed: 5
   cam: {fileID: 519420031}
-  prompt: {fileID: 362041878}
-  interactObject: {fileID: 0}
 --- !u!50 &1469157722
 Rigidbody2D:
   serializedVersion: 4
@@ -10869,6 +10868,27 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 5a90e93be5e4c234897cc86329ae5361, type: 3}
   - {fileID: 8300000, guid: 4cc7d282acbeef944a422d788a6a668a, type: 3}
   - {fileID: 8300000, guid: 5cced1e800384474d96433067c77ebfa, type: 3}
+  statBlocks:
+  - {x: 5, y: 8, z: 10, w: 0.2}
+  - {x: 10, y: 14, z: 10, w: 0.05}
+  - {x: 20, y: 5, z: 10, w: 0.75}
+  points: 0
+--- !u!114 &1469157731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1469157719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc60b72fd1a4bcf4c88f742be448b672, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _input: {fileID: 1371641370201755998, guid: 765f3e10462abc24e8c9d2cd45ee1662, type: 3}
+  _playerS: {fileID: 1469157730}
+  prompt: {fileID: 362041878}
+  interactObject: {fileID: 0}
 --- !u!1 &1510841105
 GameObject:
   m_ObjectHideFlags: 0
