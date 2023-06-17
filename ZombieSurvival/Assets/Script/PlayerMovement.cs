@@ -21,6 +21,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Camera cam;
     [SerializeField] private Transform prompt;
 
+    [SerializeField] private ParticleSystem gunShotLight;
+
     Animator anime;
     Vector3 mouse;
 
@@ -165,6 +167,8 @@ public class PlayerMovement : MonoBehaviour
     {
         if (timeTilFire <= 0 && statBlocks[(int)currentGun].z > 0)
         {
+            gunShotLight.Play();
+
             Vector3 mouseDir = (mouse - transform.position).normalized * statBlocks[(int)currentGun].y;
             mouseDir.z = 0;
             Debug.DrawRay(transform.position, mouseDir, Color.red, 0.3f);
