@@ -21,6 +21,7 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI countDownText;
     [SerializeField] private TextMeshProUGUI roundNumberText;
     [SerializeField] private TextMeshProUGUI zombieCounterText;
+    [SerializeField] private TextMeshProUGUI recordText;
 
     private float waveCountdown = 0f;
     private int waveCount = 0;
@@ -31,6 +32,9 @@ public class WaveManager : MonoBehaviour
     private int numOfZombies;
     private float spawnDelayCounter;
 
+    public int record;
+    public string keyRecord;
+    
     // Start is called before the first frame update
     private void OnEnable()
     {
@@ -42,6 +46,8 @@ public class WaveManager : MonoBehaviour
     }
     void Start()
     {
+        LoadHighScore();
+        recordText.text += record.ToString();
         waveState = WaveState.CoolDown;
         waveCountdown = waveCooldownTime;
     }
@@ -88,7 +94,15 @@ public class WaveManager : MonoBehaviour
                 }
                 break;
         }
+
+        RecordUpdate();
     }
+
+    private void OnDestroy()
+    {
+        SaveRecord();
+    }
+
     private void SpawnZombies(int zombieSpawnAmount) 
     {
         int index;
@@ -116,5 +130,33 @@ public class WaveManager : MonoBehaviour
     {
         numOfZombies--;
         zombiesKilledThisWave++;
+    }
+
+    private void RecordUpdate()
+    {
+        if (record < waveCount)
+        {
+            record = waveCount;
+            recordText.text += record.ToString();
+        }
+    }
+
+    private void SaveRecord()
+    {
+        PlayerPrefs.SetInt(keyRecord, record);
+        PlayerPrefs.Save();
+    }
+
+    private void LoadHighScore()
+    {
+        if(PlayerPrefs.HasKey(keyRecord))
+        {
+            record = PlayerPrefs.GetInt(keyRecord);
+            Debug.Log("Not found");
+        }
+        else
+        {
+            record = 0;
+        }
     }
 }
