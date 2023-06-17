@@ -15,6 +15,8 @@ public class PlayerActions : MonoBehaviour
 
     [Header("For Barricade Actions")]
     [SerializeField] private Transform prompt;
+    [SerializeField] private AudioClip barricadeNoise;
+
     public GameObject interactObject;
 
     private bool _inTrigger;
@@ -22,11 +24,14 @@ public class PlayerActions : MonoBehaviour
     private float barricadeHoldTimer;
     private float barricadeHoldCount;
     private bool isBarricadeHolding;
+    private float barricadeSoundDelay = 0;
+    private Animator animator;
 
 
     //----------------------------------Start of Script--------------------------------------------
     private void OnEnable()
     {
+        animator = GetComponent<Animator>();
         _input.action.Enable();
         _input.action.performed += InputPressedF;
         _input.action.canceled += InputLeaveF;
@@ -105,6 +110,7 @@ public class PlayerActions : MonoBehaviour
     {
         barricadeHoldCount = 0;
         isBarricadeHolding = false;
+        animator.SetBool("barricade", false);
     }
 
     private void TimerBarricade()
@@ -112,6 +118,8 @@ public class PlayerActions : MonoBehaviour
         if (isBarricadeHolding)
         {
             barricadeHoldCount += Time.deltaTime;
+            animator.SetBool("barricade", true);
+            PlayBarricadeSound();
         }
 
         if (barricadeHoldCount >= barricadeHoldTimer && interactObject != null)
@@ -119,6 +127,7 @@ public class PlayerActions : MonoBehaviour
             interactObject.GetComponent<Health>().ResetHealth();
             interactObject.GetComponent<SpriteRenderer>().enabled = true;
             interactObject.GetComponent<BoxCollider2D>().enabled = true;
+            GetComponent<Shooting>().points += 10;
             _inTrigger = false;
             barricadeHoldCount = 0;
             isBarricadeHolding = false;
@@ -133,7 +142,7 @@ public class PlayerActions : MonoBehaviour
         {
             if (newGun == _playerS.currentGun)
             {
-                _playerS.statBlocks[(int)_playerS.currentGun].z = 10;
+                _playerS.statBlocks[(int)_playerS.currentGun].z = _playerS.statBlocksDefault[(int)_playerS.currentGun].z;
             }
             else
             {
@@ -150,5 +159,17 @@ public class PlayerActions : MonoBehaviour
     public void HidePrompt()
     {
         prompt.gameObject.SetActive(false);
+    }
+    private void PlayBarricadeSound()
+    {
+        if (barricadeSoundDelay <= 0)
+        {
+            AudioSource.PlayClipAtPoint(barricadeNoise, new Vector3(0, 0, 0));
+            barricadeSoundDelay = barricadeNoise.length;
+        }
+        else
+        {
+            barricadeSoundDelay -= Time.deltaTime;
+        }
     }
 }

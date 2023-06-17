@@ -70,9 +70,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -109304401
   m_SortingLayer: 3
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -1970586091688675893, guid: ce0f3bce0b8138b41a15ffac8d1c2d4d, type: 3}
-  m_Color: {r: 0.23053813, g: 1, b: 0, a: 1}
+  m_SortingOrder: 1
+  m_Sprite: {fileID: 7605222929752105984, guid: ce0f3bce0b8138b41a15ffac8d1c2d4d, type: 3}
+  m_Color: {r: 0.16312027, g: 1, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -92,7 +92,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4568081167517365226}
   - component: {fileID: 4568081167517365220}
-  - component: {fileID: 4568081167517365223}
   - component: {fileID: 6444502987675407043}
   - component: {fileID: 4568081167517365222}
   - component: {fileID: 4568081167517365216}
@@ -143,32 +142,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!61 &4568081167517365223
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4568081167517365218}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.0014731344, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0.06, w: 0}
-    pivot: {x: 0.34210527, y: 0.5}
-    oldSize: {x: 0.19, y: 0.16}
-    newSize: {x: 0.24, y: 0.16}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.12022467, y: 0.16}
-  m_EdgeRadius: 0
 --- !u!70 &6444502987675407043
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -306,6 +279,7 @@ MonoBehaviour:
   damage: 10
   structureDamage: 10
   attackDelay: 0.5
+  barricadeNoise: {fileID: 8300000, guid: abf46ac1f46f0d0439df0606c7e78954, type: 3}
 --- !u!114 &5789858405068640850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -320,6 +294,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 20
   currentHealth: 20
+  healthRegenAmount: 0
+  deathSound: {fileID: 8300000, guid: 13423914fa56a3c44ae2fc59ef428148, type: 3}
+  deathPanel: {fileID: 0}
 --- !u!198 &9210927289270275503
 ParticleSystem:
   m_ObjectHideFlags: 0

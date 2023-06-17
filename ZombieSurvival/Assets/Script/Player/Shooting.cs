@@ -4,7 +4,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
-
+public enum GunType
+{
+    Pistol,
+    Rifle,
+    Shotgun,
+}
 public class Shooting : MonoBehaviour
 {
     [Header("Input Alocation")]
@@ -27,21 +32,30 @@ public class Shooting : MonoBehaviour
     [SerializeField] private ParticleSystem gunShotLight;
     [SerializeField] private Sprite[] bulletIcons;
     [SerializeField] private AudioClip[] bulletNoise;
+    [SerializeField] public Vector4[] statBlocksDefault;
 
-    public Vector4[] statBlocks = { new Vector4(5f, 8f, 10, 0.2f), new Vector4(10f, 14f, 10, 0.05f), new Vector4(20f, 5f, 10, 0.75f) };
+    [HideInInspector] public Vector4[] statBlocks;
 
 
     [Header("Character's Earnings")]
     public int points;
 
+    private Animator animator;
+
     private void OnEnable()
     {
+        animator = GetComponent<Animator>();
         _input.action.Enable();
         _input.action.performed += PressedFire;
     }
 
     void Start()
     {
+        statBlocks[0] = statBlocksDefault[0];
+        statBlocks[1] = statBlocksDefault[1];
+        statBlocks[2] = statBlocksDefault[2];
+        statBlocks[3] = statBlocksDefault[3];
+
         timeTilFire = 0.0f;
         points = 0;
         ammoDisplay.text = statBlocks[(int)currentGun].z.ToString();
@@ -71,9 +85,9 @@ public class Shooting : MonoBehaviour
 
     public void PressedFire(InputAction.CallbackContext value)
     {
-
         if (timeTilFire <= 0 && statBlocks[(int)currentGun].z > 0)
         {
+            animator.SetTrigger("shoot");
             gunShotLight.Play();
 
             Vector3 mouseDir = (mouse - transform.position).normalized * statBlocks[(int)currentGun].y;
@@ -89,7 +103,7 @@ public class Shooting : MonoBehaviour
                 {
                     hit.collider.GetComponent<Health>().ReduceHealth(statBlocks[(int)currentGun].x);
                     hit.collider.GetComponent<ParticleSystem>().Play();
-                    points += 2 * (int)statBlocks[(int)currentGun].x;
+                    points += (int)statBlocks[(int)currentGun].x;
                 }
             }
 
@@ -103,8 +117,6 @@ public class Shooting : MonoBehaviour
             AudioSource.PlayClipAtPoint(empty, new Vector3(0, 0, 0));
             timeTilFire = statBlocks[(int)currentGun].w;
         }
-
-
     }
 
 }

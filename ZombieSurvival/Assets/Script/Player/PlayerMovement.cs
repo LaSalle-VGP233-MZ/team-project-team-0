@@ -6,12 +6,6 @@ using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public enum GunType
-{
-    Pistol,
-    Rifle,
-    Shotgun,
-}
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Input Alocation")]
@@ -89,8 +83,4 @@ public class PlayerMovement : MonoBehaviour
         _input.action.performed -= Movement;
         _input.action.canceled -= StopMovement;
     }
-
-    
-
-    
 }

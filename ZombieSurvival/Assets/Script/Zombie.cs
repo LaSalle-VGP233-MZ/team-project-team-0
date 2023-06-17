@@ -8,6 +8,7 @@ public class Zombie : MonoBehaviour
     [SerializeField] private float damage;
     [SerializeField] private float structureDamage;
     [SerializeField] private float attackDelay;
+    [SerializeField] private AudioClip barricadeNoise;
 
     AIDestinationSetter pathfinder;
     private float attackDelayTimer = 0;
@@ -22,18 +23,18 @@ public class Zombie : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, attackRadius);
-        foreach(var collider in colliders)
+        if (attackDelayTimer <= 0)
         {
-            if(attackDelayTimer <= 0)
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, attackRadius);
+            foreach (var collider in colliders)
             {
                 Attack(collider);
                 attackDelayTimer = attackDelay;
             }
-            else
-            {
-                attackDelayTimer -= Time.deltaTime;
-            }
+        }
+        else
+        {
+            attackDelayTimer -= Time.deltaTime;
         }
     }
     void Attack(Collider2D collider)
@@ -47,6 +48,7 @@ public class Zombie : MonoBehaviour
         {
             collider.gameObject.GetComponent<Health>().ReduceHealth(structureDamage);
             attackDelayTimer = attackDelay;
+            AudioSource.PlayClipAtPoint(barricadeNoise, new Vector3(0, 0, 0));
         }
     }
 }
