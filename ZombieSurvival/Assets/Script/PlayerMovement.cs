@@ -8,8 +8,8 @@ using UnityEngine.InputSystem;
 
 public enum GunType
 {
-    AR,
     Pistol,
+    Rifle,
     Shotgun,
 }
 public class PlayerMovement : MonoBehaviour
@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
     Vector3 mouse;
 
     //Gun Damage / Gun Range / Gun Ammo / Rate of Fire
-    private Vector4[] statBlocks = { new Vector4(3.4f, 8f, 10, 0.2f), new Vector4(6f, 14f, 10, 0.05f), new Vector4(18f, 5f, 10, 0.75f) };
+    private Vector4[] statBlocks = { new Vector4(5f, 8f, 10, 0.2f), new Vector4(10f, 14f, 10, 0.05f), new Vector4(20f, 5f, 10, 0.75f) };
     private float timeTilFire = 0f;
 
     [SerializeField] private GunType currentGun = GunType.Pistol;
@@ -45,7 +45,7 @@ public class PlayerMovement : MonoBehaviour
     private float barricadeHoldCount = 0;
     private bool isBarricadeHolding = false;
 
-    private int points = 100;
+    private int points = 0;
 
 
     private void Awake()
@@ -96,6 +96,8 @@ public class PlayerMovement : MonoBehaviour
         ammoDisplay.text = statBlocks[(int)currentGun].z.ToString();
         ammoIcon.sprite = bulletIcons[(int)currentGun];
         pointsDisplay.text = "Points: " + points.ToString();
+        prompt.transform.rotation = Quaternion.identity;
+        prompt.transform.position = new Vector3(transform.position.x,transform.position.y + 1,0);
     }
 
     private void SetAnimStates()
@@ -142,7 +144,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void InputPressedF(InputAction.CallbackContext value)
     {
-        if (_inTrigger && interactObject != null)
+        if (_inTrigger && interactObject.CompareTag("Breakable"))
         {
             isBarricadeHolding = true;
         }
@@ -173,9 +175,8 @@ public class PlayerMovement : MonoBehaviour
                 if (hit.collider.gameObject.CompareTag("Zombie"))
                 {
                     hit.collider.GetComponent<Health>().ReduceHealth(statBlocks[(int)currentGun].x);
-                    statBlocks[(int)currentGun].z++;
                     hit.collider.GetComponent<ParticleSystem>().Play();
-                    points += (int)statBlocks[(int)currentGun].x;
+                    points += 2*(int)statBlocks[(int)currentGun].x;
                 }
             }
 
@@ -208,19 +209,19 @@ public class PlayerMovement : MonoBehaviour
                 _inTrigger = true;
                 interactObject = barricade;
             }
-            else if (collision.CompareTag("Gun"))
-            {
-                GameObject gun = collision.gameObject;
-                DisplayPrompt();
-                _inTrigger = true;
-                interactObject = gun;
-            }
+        }
+        else if (collision.CompareTag("Gun"))
+        {
+            GameObject gun = collision.gameObject;
+            DisplayPrompt();
+            _inTrigger = true;
+            interactObject = gun;
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Structure"))
+        if (collision.CompareTag("Structure") || collision.CompareTag("Gun"))
         {
             HidePrompt();
             _inTrigger = false;

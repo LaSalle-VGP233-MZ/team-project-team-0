@@ -15,17 +15,11 @@ public class GunPurchase : MonoBehaviour
     [SerializeField] private TextMeshProUGUI priceText;
     [SerializeField] private Transform prompt;
 
-
-    public int price;
-    private bool _inTrigger;
-    public GameObject currentGunObject;
-    private GameObject player;
+    [HideInInspector]public int price;
 
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.Find("Player");
-
         switch (gunType)
         {
             case GunType.Pistol:
@@ -43,43 +37,4 @@ public class GunPurchase : MonoBehaviour
         }
         priceText.text = price.ToString();
     }
-
-    //private void OnTriggerStay2D(Collider2D collision)
-    //{
-    //    if (collision.CompareTag("Structure"))
-    //    {
-    //        GameObject gun = collision.transform.parent.gameObject;
-    //        if (!gun.GetComponent<BoxCollider2D>().enabled)
-    //        {
-    //            DisplayPrompt();
-    //            _inTrigger = true;
-    //            currentGunObject = gun;
-    //        }
-    //    }
-    //}
-    //public void InputPressedF(InputAction.CallbackContext value)
-    //{
-    //    if (_inTrigger && currentGunObject != null)
-    //    {
-    //        player.GetComponent<PlayerMovement>().PurchaseGun(gunType, price);
-    //        _inTrigger = false;
-    //    }
-    //}
-    //private void OnTriggerExit2D(Collider2D collision)
-    //{
-    //    if (collision.CompareTag("Gun"))
-    //    {
-    //        HidePrompt();
-    //        _inTrigger = false;
-    //        currentGunObject = null;
-    //    }
-    //}
-    //public void DisplayPrompt()
-    //{
-    //    prompt.gameObject.SetActive(true);
-    //}
-    //public void HidePrompt()
-    //{
-    //    prompt.gameObject.SetActive(false);
-    //}
 }
