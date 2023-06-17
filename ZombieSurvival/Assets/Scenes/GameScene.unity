@@ -161,8 +161,6 @@ MonoBehaviour:
   roundNumberText: {fileID: 1708764999}
   zombieCounterText: {fileID: 194860226}
   recordText: {fileID: 397818009}
-  record: 0
-  keyRecord: PR
 --- !u!4 &348686
 Transform:
   m_ObjectHideFlags: 0
@@ -11523,6 +11521,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _input: {fileID: 1371641370201755998, guid: 765f3e10462abc24e8c9d2cd45ee1662, type: 3}
+  _inputScape: {fileID: -2858603630611830813, guid: 765f3e10462abc24e8c9d2cd45ee1662, type: 3}
   pauseScreen: {fileID: 1810446116}
   _playerS: {fileID: 1469157730}
   prompt: {fileID: 362041878}

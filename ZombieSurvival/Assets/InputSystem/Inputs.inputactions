@@ -91,6 +91,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "InputPressedScape",
+                    "type": "Button",
+                    "id": "e88232e7-9ae7-42a1-8384-fd5bba582c2b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -124,6 +132,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "InputPressedFire",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "34f652ae-4dd1-415f-804a-c3ee0507b735",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InputPressedScape",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

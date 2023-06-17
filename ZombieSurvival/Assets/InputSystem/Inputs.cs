@@ -104,6 +104,14 @@ public class @Inputs : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""InputPressedScape"",
+                    ""type"": ""Button"",
+                    ""id"": ""e88232e7-9ae7-42a1-8384-fd5bba582c2b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -139,6 +147,17 @@ public class @Inputs : IInputActionCollection, IDisposable
                     ""action"": ""InputPressedFire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""34f652ae-4dd1-415f-804a-c3ee0507b735"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InputPressedScape"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -152,6 +171,7 @@ public class @Inputs : IInputActionCollection, IDisposable
         m_Actions = asset.FindActionMap("Actions", throwIfNotFound: true);
         m_Actions_InputPressedBar = m_Actions.FindAction("InputPressedBar", throwIfNotFound: true);
         m_Actions_InputPressedFire = m_Actions.FindAction("InputPressedFire", throwIfNotFound: true);
+        m_Actions_InputPressedScape = m_Actions.FindAction("InputPressedScape", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -236,12 +256,14 @@ public class @Inputs : IInputActionCollection, IDisposable
     private IActionsActions m_ActionsActionsCallbackInterface;
     private readonly InputAction m_Actions_InputPressedBar;
     private readonly InputAction m_Actions_InputPressedFire;
+    private readonly InputAction m_Actions_InputPressedScape;
     public struct ActionsActions
     {
         private @Inputs m_Wrapper;
         public ActionsActions(@Inputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @InputPressedBar => m_Wrapper.m_Actions_InputPressedBar;
         public InputAction @InputPressedFire => m_Wrapper.m_Actions_InputPressedFire;
+        public InputAction @InputPressedScape => m_Wrapper.m_Actions_InputPressedScape;
         public InputActionMap Get() { return m_Wrapper.m_Actions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -257,6 +279,9 @@ public class @Inputs : IInputActionCollection, IDisposable
                 @InputPressedFire.started -= m_Wrapper.m_ActionsActionsCallbackInterface.OnInputPressedFire;
                 @InputPressedFire.performed -= m_Wrapper.m_ActionsActionsCallbackInterface.OnInputPressedFire;
                 @InputPressedFire.canceled -= m_Wrapper.m_ActionsActionsCallbackInterface.OnInputPressedFire;
+                @InputPressedScape.started -= m_Wrapper.m_ActionsActionsCallbackInterface.OnInputPressedScape;
+                @InputPressedScape.performed -= m_Wrapper.m_ActionsActionsCallbackInterface.OnInputPressedScape;
+                @InputPressedScape.canceled -= m_Wrapper.m_ActionsActionsCallbackInterface.OnInputPressedScape;
             }
             m_Wrapper.m_ActionsActionsCallbackInterface = instance;
             if (instance != null)
@@ -267,6 +292,9 @@ public class @Inputs : IInputActionCollection, IDisposable
                 @InputPressedFire.started += instance.OnInputPressedFire;
                 @InputPressedFire.performed += instance.OnInputPressedFire;
                 @InputPressedFire.canceled += instance.OnInputPressedFire;
+                @InputPressedScape.started += instance.OnInputPressedScape;
+                @InputPressedScape.performed += instance.OnInputPressedScape;
+                @InputPressedScape.canceled += instance.OnInputPressedScape;
             }
         }
     }
@@ -279,5 +307,6 @@ public class @Inputs : IInputActionCollection, IDisposable
     {
         void OnInputPressedBar(InputAction.CallbackContext context);
         void OnInputPressedFire(InputAction.CallbackContext context);
+        void OnInputPressedScape(InputAction.CallbackContext context);
     }
 }

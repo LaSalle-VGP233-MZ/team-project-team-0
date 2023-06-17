@@ -32,8 +32,8 @@ public class WaveManager : MonoBehaviour
     private int numOfZombies;
     private float spawnDelayCounter;
 
-    public int record;
-    public string keyRecord;
+    private int record;
+    private string keyRecord;
     
     // Start is called before the first frame update
     private void OnEnable()
