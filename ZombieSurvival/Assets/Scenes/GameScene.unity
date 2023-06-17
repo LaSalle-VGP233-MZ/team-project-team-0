@@ -5877,6 +5877,7 @@ GameObject:
   - component: {fileID: 1469157723}
   - component: {fileID: 1469157722}
   - component: {fileID: 1469157721}
+  - component: {fileID: 1469157730}
   - component: {fileID: 1469157720}
   - component: {fileID: 1469157727}
   - component: {fileID: 1469157729}
@@ -5918,20 +5919,6 @@ MonoBehaviour:
   speed: 5
   cam: {fileID: 519420031}
   prompt: {fileID: 362041878}
-  gunShotLight: {fileID: 1469157729}
-  currentGun: 0
-  ammoDisplay: {fileID: 1228423207}
-  pointsDisplay: {fileID: 895344655}
-  ammoIcon: {fileID: 761154501}
-  bulletIcons:
-  - {fileID: 2853566114444752598, guid: 38fc5e63bf35a134aaf1b838df6be6e8, type: 3}
-  - {fileID: -6741822026156145403, guid: 38fc5e63bf35a134aaf1b838df6be6e8, type: 3}
-  - {fileID: -6058229231348979346, guid: 38fc5e63bf35a134aaf1b838df6be6e8, type: 3}
-  bulletNoise:
-  - {fileID: 8300000, guid: 5a90e93be5e4c234897cc86329ae5361, type: 3}
-  - {fileID: 8300000, guid: 4cc7d282acbeef944a422d788a6a668a, type: 3}
-  - {fileID: 8300000, guid: 5cced1e800384474d96433067c77ebfa, type: 3}
-  empty: {fileID: 8300000, guid: 7dac1d114dbf69c47bddd92cb740150d, type: 3}
   interactObject: {fileID: 0}
 --- !u!50 &1469157722
 Rigidbody2D:
@@ -10854,6 +10841,34 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!114 &1469157730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1469157719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba463e81f262b52448ec62de0868d9bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _input: {fileID: -6928245533396216093, guid: 765f3e10462abc24e8c9d2cd45ee1662, type: 3}
+  cam: {fileID: 519420031}
+  currentGun: 0
+  ammoDisplay: {fileID: 1228423207}
+  pointsDisplay: {fileID: 895344655}
+  ammoIcon: {fileID: 761154501}
+  empty: {fileID: 8300000, guid: 7dac1d114dbf69c47bddd92cb740150d, type: 3}
+  gunShotLight: {fileID: 1469157729}
+  bulletIcons:
+  - {fileID: 2853566114444752598, guid: 38fc5e63bf35a134aaf1b838df6be6e8, type: 3}
+  - {fileID: -6741822026156145403, guid: 38fc5e63bf35a134aaf1b838df6be6e8, type: 3}
+  - {fileID: -6058229231348979346, guid: 38fc5e63bf35a134aaf1b838df6be6e8, type: 3}
+  bulletNoise:
+  - {fileID: 8300000, guid: 5a90e93be5e4c234897cc86329ae5361, type: 3}
+  - {fileID: 8300000, guid: 4cc7d282acbeef944a422d788a6a668a, type: 3}
+  - {fileID: 8300000, guid: 5cced1e800384474d96433067c77ebfa, type: 3}
 --- !u!1 &1510841105
 GameObject:
   m_ObjectHideFlags: 0
