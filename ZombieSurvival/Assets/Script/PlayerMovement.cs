@@ -30,6 +30,8 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private GunType currentGun = GunType.Pistol;
     [SerializeField] private TextMeshProUGUI ammoDisplay;
+    [SerializeField] private TextMeshProUGUI pointsDisplay;
+
     [SerializeField] private Image ammoIcon;
 
     [SerializeField] private Sprite[] bulletIcons;
@@ -38,10 +40,13 @@ public class PlayerMovement : MonoBehaviour
 
     private Inputs _input;
     private bool _inTrigger;
-    public GameObject currentBar;
+    public GameObject interactObject;
     private float barricadeHoldTimer = 2f;
     private float barricadeHoldCount = 0;
     private bool isBarricadeHolding = false;
+
+    private int points = 100;
+
 
     private void Awake()
     {
@@ -87,6 +92,10 @@ public class PlayerMovement : MonoBehaviour
         SetAnimStates();
 
         TimerBarricade();
+
+        ammoDisplay.text = statBlocks[(int)currentGun].z.ToString();
+        ammoIcon.sprite = bulletIcons[(int)currentGun];
+        pointsDisplay.text = "Points: " + points.ToString();
     }
 
     private void SetAnimStates()
@@ -133,9 +142,14 @@ public class PlayerMovement : MonoBehaviour
 
     public void InputPressedF(InputAction.CallbackContext value)
     {
-        if (_inTrigger && currentBar != null)
+        if (_inTrigger && interactObject != null)
         {
             isBarricadeHolding = true;
+        }
+        else if (_inTrigger && interactObject.CompareTag("Gun"))
+        {
+            PurchaseGun(interactObject);
+            _inTrigger = false;
         }
     }
 
@@ -161,6 +175,7 @@ public class PlayerMovement : MonoBehaviour
                     hit.collider.GetComponent<Health>().ReduceHealth(statBlocks[(int)currentGun].x);
                     statBlocks[(int)currentGun].z++;
                     hit.collider.GetComponent<ParticleSystem>().Play();
+                    points += (int)statBlocks[(int)currentGun].x;
                 }
             }
 
@@ -174,8 +189,7 @@ public class PlayerMovement : MonoBehaviour
             timeTilFire = statBlocks[(int)currentGun].w;
         }
 
-        ammoDisplay.text = statBlocks[(int)currentGun].z.ToString();
-        ammoIcon.sprite = bulletIcons[(int)currentGun];
+        
     }
 
     public void ReleasedFire(InputAction.CallbackContext value)
@@ -192,7 +206,14 @@ public class PlayerMovement : MonoBehaviour
             {
                 DisplayPrompt();
                 _inTrigger = true;
-                currentBar = barricade;
+                interactObject = barricade;
+            }
+            else if (collision.CompareTag("Gun"))
+            {
+                GameObject gun = collision.gameObject;
+                DisplayPrompt();
+                _inTrigger = true;
+                interactObject = gun;
             }
         }
     }
@@ -203,7 +224,7 @@ public class PlayerMovement : MonoBehaviour
         {
             HidePrompt();
             _inTrigger = false;
-            currentBar = null;
+            interactObject = null;
         }
     }
 
@@ -214,14 +235,31 @@ public class PlayerMovement : MonoBehaviour
             barricadeHoldCount += Time.deltaTime;
         }
 
-        if (barricadeHoldCount >= barricadeHoldTimer && currentBar != null)
+        if (barricadeHoldCount >= barricadeHoldTimer && interactObject != null)
         {
-            currentBar.GetComponent<Health>().ResetHealth();
-            currentBar.GetComponent<SpriteRenderer>().enabled = true;
-            currentBar.GetComponent<BoxCollider2D>().enabled = true;
+            interactObject.GetComponent<Health>().ResetHealth();
+            interactObject.GetComponent<SpriteRenderer>().enabled = true;
+            interactObject.GetComponent<BoxCollider2D>().enabled = true;
             _inTrigger = false;
             barricadeHoldCount = 0;
             isBarricadeHolding = false;
+        }
+    }
+    public void PurchaseGun(GameObject gunObject)
+    {
+        int price = gunObject.GetComponent<GunPurchase>().price;
+        GunType newGun = gunObject.GetComponent<GunPurchase>().gunType;
+        if (price <= points)
+        {
+            if (newGun == currentGun)
+            {
+                statBlocks[(int)currentGun].z = 10;
+            }
+            else
+            {
+                currentGun = newGun;
+            }
+            points -= price;
         }
     }
 }
