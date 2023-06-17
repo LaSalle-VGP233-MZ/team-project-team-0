@@ -47,7 +47,7 @@ public class WaveManager : MonoBehaviour
     void Start()
     {
         LoadHighScore();
-        recordText.text += record.ToString();
+        recordText.text = "PR: " + record.ToString();
         waveState = WaveState.CoolDown;
         waveCountdown = waveCooldownTime;
     }
@@ -137,7 +137,7 @@ public class WaveManager : MonoBehaviour
         if (record < waveCount)
         {
             record = waveCount;
-            recordText.text += record.ToString();
+            recordText.text = "PR: " + record.ToString();
         }
     }
 
