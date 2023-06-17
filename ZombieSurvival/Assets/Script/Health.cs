@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
+    [Header("health")]
     [SerializeField] private float maxHealth;
     [SerializeField] private float currentHealth;
+
+    [Header("Panel")]
+    [SerializeField]
+    private GameObject deathPanel;
 
     private GameObject objPool;
     public delegate void ZombieDied();
@@ -30,6 +35,8 @@ public class Health : MonoBehaviour
             }
             else if (gameObject.CompareTag("Player"))
             {
+                deathPanel.SetActive(true);
+                Time.timeScale = 0;
                 gameObject.SetActive(false);
             }
             else if (gameObject.CompareTag("Zombie"))
